@@ -1,0 +1,29 @@
+# This is my own manual duplication submission checker
+# Relies on a list of manuscripts that Pete can get via a SQL query
+# The list is currently up to date as of 05/12/23
+
+import pandas as pd
+from thefuzz import fuzz
+
+
+df = pd.read_excel(r"C:\Users\rosem\OneDrive\Desktop\all pubs 12042023.xlsx")
+print(df.columns)
+# Remove any with NaN in title col
+df = df[df['title'].notna()]
+
+# Enter title of manuscript to search here
+input_string = 'Does HPV vaccination during periconceptional or gestational period increase the risk of adverse pregnancy outcomes? --An updated systematic review and meta-analysis based on timing of vaccination'
+# Make title col into a list
+title = df['title'].tolist()
+#print(df['title'].tail())
+# Use list comprehension to do fuzzy matching of list with input_string
+score = [fuzz.ratio(input_string, element) for element in title]
+#print(score) # this works as expected
+#print(type(score))
+# Append the score list as a new column to df
+df['fuzzy score'] = score
+#print(df['fuzzy score'])
+# Now filter to only show rows above a certain score (set at 60 after testing threshold)
+df_filtered = df[df['fuzzy score'] >= 60]
+print('The match scores are below:')
+print(df_filtered[['title', 'submission_id']]) # to show any possible matches
