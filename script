@@ -1,19 +1,20 @@
 # This is my own manual duplication submission checker
 # Relies on a list of manuscripts that Pete can get via a SQL query
-# The list is currently up to date as of 30/01/24
+# The list is currently up to date as of 27/02/24
+# Note: get a tab separated file from Pete then open a blank workbook, load data with tab separation and make sure to save the new TRANSFORMED data
 
 import pandas as pd
 from thefuzz import fuzz
 
 # need to change the above to an Excel file (not csv as it won't work)
-# Note to add if ok: - No duplicates found in duplicate title scan
-df = pd.read_excel(r"C:\Users\rosem\OneDrive\Desktop\titles_subs_30_Jan_2023.xlsx")
+# Note to add if ok: - No duplicates found in duplicate title scan (report last updated however on 06/02/24)
+df = pd.read_excel(r"C:\Users\rosem\OneDrive\Desktop\Duplicate title files\27 Feb 2024.xlsx")
 print(df.columns)
 # Remove any with NaN in title col
 df = df[df['title'].notna()]
 
 # Enter title of manuscript to search here
-input_string = "Identification of ALDOB as a novel prognostic biomarker in kidney clear cell renal cell carcinoma"
+input_string = "The spatio-temporal expression profiles of silkworm pseudogenes provide valuable insights into their biological roles"
 # Make title col into a list
 title = df['title'].tolist()
 #print(df['title'].tail())
@@ -27,6 +28,8 @@ df['fuzzy score'] = score
 df = df.sort_values(by='fuzzy score', ascending=False) # sort values from highest to lowest
 # Now filter to only show rows above a certain score (set 70 after testing threshold)
 df_filtered = df[df['fuzzy score'] >= 70]
-print('The match scores are below:')
+print(f'The match scores for "{input_string}" are below:')
 print(df_filtered[['submission_id', 'fuzzy score']]) # to show any possible matches
 # For the above line, might be best to try to print from high to low fuzzy score
+
+# ADD IN A BIT TO SAY IF EMPTY DATAFRAME THEN PRINT 'THERE ARE NO MATCHES' OR SOMETHING LIKE THIS
