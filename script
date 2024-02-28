@@ -1,14 +1,13 @@
 # This is my own manual duplication submission checker
-# Relies on a list of manuscripts that Pete can get via a SQL query
+# Relies on a list of manuscripts that Pete can get via the database
 # The list is currently up to date as of 27/02/24
 # Note: get a tab separated file from Pete then open a blank workbook, load data with tab separation and make sure to save the new TRANSFORMED data
 
 import pandas as pd
 from thefuzz import fuzz
 
-# need to change the above to an Excel file (not csv as it won't work)
-# Note to add if ok: - No duplicates found in duplicate title scan (report last updated however on 06/02/24)
-df = pd.read_excel(r"C:\Users\rosem\OneDrive\Desktop\Duplicate title files\27 Feb 2024.xlsx")
+# Note to add if ok: - No duplicates found in duplicate title scan
+df = pd.read_excel(r"C:\Users\rosem\OneDrive\Desktop\Duplicate title files\27 Feb 2024.xlsx") # read report 
 print(df.columns)
 # Remove any with NaN in title col
 df = df[df['title'].notna()]
